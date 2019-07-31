@@ -24,6 +24,31 @@ print(df2)
 
 df2 = df2.reset_index()
 print(df2)
-# reset_index 사용시 drop = True 설정시 버려짐
+# reset_index 사용시 drop = True 설정시 기존 인덱스 버려짐
 df2 = df2.reset_index(drop=True)
 print(df2)
+
+# ----------------------------------- 연습문제 1
+
+# 1. 5명의 국,영,수 점수 만들기, 학생이름 열 포함하지 않기,
+# df_score1 명을 가진 DataFrame생성
+# df_score1.index 명에 학생이름 지정 index생성
+# reset_index 로 df_score1.index을 일반 데이터열로 바꾸어서 df_score2 만들기
+
+np.random.seed(34)
+
+df_score1 = pd.DataFrame(np.random.randint(50, 100, size =(5, 3)))
+print(df_score1)
+
+df_score1.index = ['하영','선우','용후','세영','희택']
+df_score1.columns = ['국어','수학','영어']
+print(df_score1)
+
+df_score2 = df_score1.reset_index()
+print(df_score2)
+
+
+# 2. df_score2 에 set_index로 학생이름 나타내는 인덱스 변경
+
+df_score2 = df_score2.set_index('index')
+print(df_score2)
