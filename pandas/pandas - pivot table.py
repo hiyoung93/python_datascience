@@ -1,6 +1,4 @@
-import pandas as pd
-import numpy as np
-import seaborn as sns
+
 # ----------------------------------- pivot table
 '''
 pivot_table(data, values = None, index = None, Cloumns = None, aggfunc = 'mean',
@@ -79,3 +77,47 @@ print(tips.groupby('sex')[['tip_pct']].mean())
 # print(tips.groupby('sex')['tip_pct'].mean())
 
 print(tips.groupby('smoker')[['tip_pct']].mean())
+
+# pivot_table으로 진행
+# 변수명. pivot_table('데이터==columns name','row')
+print(tips.pivot_table("tip_pct", "sex"))
+
+# 변수명.pivot_table('데이터',['row','groupby'])
+print(tips.pivot_table("tip_pct", ["sex", "smoker"]))
+
+# 변수명.pivot_table('데이터','row','columns')
+print(tips.pivot_table("tip_pct", "sex", "smoker"))
+
+# ---------------- describe로 여러 통계값 한번에 알아보기
+# 변수명.pivot_table('row')[[데이터]]describe
+print(tips.groupby('sex')[['tip_pct']].describe())
+
+
+# 변수명.pivot_table('row')[[데이터]]describe
+print(tips.groupby('smoker')[['tip_pct']].describe())
+
+
+# 변수명.pivot_table('row')[[데이터]]describe
+print(tips.groupby(['sex','smoker'])[['tip_pct']].describe())
+
+
+# ---------------------------------------팁의 차이를 알아보자
+# 그룹연산의 함수가 없으므로 함수를 직접만들고 agg메서드를 사용
+
+# 여기서 x의 정체를 잘 모르겠음..
+def peak_to_peak(x):
+    return x.max() - x.min()
+# tips.groupby(['row','==명'])[['columns명']].agg(함수)
+print(tips.groupby(['sex','smoker'])[['tip']].agg(peak_to_peak))
+
+# 그룹연산 동시에 하기
+# 변수명.groupby(['row','==명']).agg(['columns명',만든 함수])[['columns의 groupby']]
+print(tips.groupby(['sex','smoker']).agg(['mean', peak_to_peak])[['total_bill']])
+
+# 열마다 다른 연산을 하고 싶으면 열 라벨과 연산이름(함수)를 dict에 넣는다
+# 변수명.groupby(['row','==명']).agg(['columns1': 연산1,'columns2': 연산2])
+print(tips.groupby(['sex','smoker']).agg(
+    {'tip_pct' : 'mean', 'total_bill':peak_to_peak}))
+
+print(tips.pivot_table('size',['time','sex','smoker'],'day',
+                        aggfunc = 'sum', fill_value=0))
